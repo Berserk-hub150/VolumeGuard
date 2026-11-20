@@ -12,20 +12,11 @@ jobs:
   review:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out proposed merge and its parents
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          path: proposed
           fetch-depth: 0
           persist-credentials: false
-      - name: Load the installed reviewer from the base revision
-        uses: actions/checkout@v4
+      - uses: Berserk-hub150/VolumeGuard@83bbd6a2c10d875bc24114bc72de101a8d33485c
         with:
-          path: trusted
-          ref: ${{ github.event.pull_request.base.sha }}
-          persist-credentials: false
-      - uses: ./trusted/.github/actions/volumeguard
-        with:
-          repository-path: proposed
           compose-file: compose.yaml
           comment-token: ${{ github.token }}
