@@ -1,0 +1,30 @@
+name: VolumeGuard
+description: Review changes to persistent Docker Compose storage before merging a pull request.
+inputs:
+  compose-file:
+    description: Compose file path relative to the target repository root
+    default: compose.yaml
+  repository-path:
+    description: Checkout containing the PR merge commit and its base
+    default: '.'
+  project-name:
+    description: Optional deployment project name (Compose -p)
+    default: ''
+  fail-on-change:
+    description: Fail the check when storage changes are found
+    default: 'true'
+  comment-token:
+    description: Optional GitHub token to maintain a comment on same-repository PRs
+    default: ''
+runs:
+  using: composite
+  steps:
+    - name: Compare persistent storage
+      shell: bash
+      env:
+        VG_FILE: ${{ inputs.compose-file }}
+        VG_REPO: ${{ inputs.repository-path }}
+        VG_PROJECT: ${{ inputs.project-name }}
+        VG_BLOCK: ${{ inputs.fail-on-change }}
+        VG_TOKEN: ${{ inputs.comment-token }}
+      run: python3 -I "$GITHUB_ACTION_PATH/run_action.py"

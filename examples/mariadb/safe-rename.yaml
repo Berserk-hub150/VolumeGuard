@@ -1,0 +1,11 @@
+name: moodle
+services:
+  db:
+    image: mariadb:11.4
+    environment:
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "1" # Disposable demo only. No host port is published.
+    volumes:
+      - course_store:/var/lib/mysql
+volumes:
+  course_store:
+    name: moodle_dbdata
